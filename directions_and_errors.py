@@ -11,6 +11,9 @@ from flask import Flask
 from flask import make_response
 
 
+from flask import abort, redirect, url_for
+
+
 app = Flask(
     __name__
     )
@@ -23,23 +26,31 @@ app = Flask(
 
 def index():
 
-	render_template("index.html", foo == 42)
-
-	username = request.cookies.get('username')
-	return f"<p>usename: {username}</p>"
+	return redirect(url_for('login'))
 
 
+@app.route(
+	'/login',
+	)
 
+def login():
+	abort(401)
+
+@app.errorhandler(401)
+def page_not_found(
+	error,
+	):
+	return render_template('page_not_found.html'), 401
 
 
 '''
 
 # start the service
 
-flask --app cookie --debug run
+flask --app directions_and_errors --debug run
 
 # user the service 
 
-http://127.0.0.1:5000/spanish_spell_checker
+http://127.0.0.1:5000/
 
 '''
